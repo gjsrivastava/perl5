@@ -679,7 +679,7 @@ Perl_re_intuit_start(pTHX_
     }
 
     if (prog->extflags & RXf_ANCH) { /* Match at \G, beg-of-str or after \n */
-	ml_anch = !( (prog->extflags & RXf_ANCH_SINGLE)
+	ml_anch = !( (prog->extflags & (RXf_ANCH_SBOL|RXf_ANCH_GPOS))
 		     || ( (prog->extflags & RXf_ANCH_BOL)
 			  && !multiline ) );	/* Check after \n? */
 
@@ -2585,7 +2585,8 @@ Perl_regexec_flags(pTHX_ REGEXP * const rx, char *stringarg, char *strend,
 	    } /* end search for newline */
 	} /* end anchored/multiline check string search */
 	goto phooey;
-    } else if (RXf_GPOS_CHECK == (prog->extflags & RXf_GPOS_CHECK)) 
+    } else if ((prog->extflags & (RXf_GPOS_SEEN|RXf_ANCH_GPOS))
+                              == (RXf_GPOS_SEEN|RXf_ANCH_GPOS))
     {
         /* For anchored \G, the only position it can match from is
          * (ganch-gofs); we already set startpos to this above; if intuit

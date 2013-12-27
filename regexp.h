@@ -393,8 +393,6 @@ get_regex_charset_name(const U32 flags, STRLEN* const lenp)
 #define RXf_GPOS_FLOAT  	(1<<(RXf_BASE_SHIFT+5))
 /* two bits here */
 #define RXf_ANCH        	(RXf_ANCH_BOL|RXf_ANCH_MBOL|RXf_ANCH_GPOS|RXf_ANCH_SBOL)
-#define RXf_GPOS_CHECK          (RXf_GPOS_SEEN|RXf_ANCH_GPOS)
-#define RXf_ANCH_SINGLE         (RXf_ANCH_SBOL|RXf_ANCH_GPOS)
 
 /* What we have seen */
 #define RXf_NO_INPLACE_SUBST    (1<<(RXf_BASE_SHIFT+6))

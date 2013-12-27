@@ -6845,7 +6845,7 @@ reStudy:
 	    r->check_substr = r->anchored_substr;
 	    r->check_utf8 = r->anchored_utf8;
 	    r->check_offset_min = r->check_offset_max = r->anchored_offset;
-	    if (r->extflags & RXf_ANCH_SINGLE)
+	    if (r->extflags & (RXf_ANCH_SBOL|RXf_ANCH_GPOS))
 		r->extflags |= RXf_NOSCAN;
 	}
 	else {
