@@ -679,9 +679,9 @@ Perl_re_intuit_start(pTHX_
     }
 
     if (prog->extflags & RXf_ANCH) { /* Match at \G, beg-of-str or after \n */
-	ml_anch = !( (prog->extflags & (RXf_ANCH_SBOL|RXf_ANCH_GPOS))
-		     || ( (prog->extflags & RXf_ANCH_BOL)
-			  && !multiline ) );	/* Check after \n? */
+        /* Check after \n? */
+	ml_anch = (     (prog->extflags & RXf_ANCH_MBOL)
+		    || ((prog->extflags & RXf_ANCH_BOL) && multiline));
 
 	if (!ml_anch) {
             /* we are only allowed to match at BOS or \G */
