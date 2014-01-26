@@ -6958,6 +6958,7 @@ reStudy:
         /* A temporary algorithm prefers floated substr to fixed one to dig
          * more info. */
 	if (longest_fixed_length > longest_float_length) {
+	    r->substrs->check_ix = 0;
 	    r->check_end_shift = r->anchored_end_shift;
 	    r->check_substr = r->anchored_substr;
 	    r->check_utf8 = r->anchored_utf8;
@@ -6966,6 +6967,7 @@ reStudy:
                 r->intflags |= PREGf_NOSCAN;
 	}
 	else {
+	    r->substrs->check_ix = 1;
 	    r->check_end_shift = r->float_end_shift;
 	    r->check_substr = r->float_substr;
 	    r->check_utf8 = r->float_utf8;
@@ -6977,6 +6979,8 @@ reStudy:
 	    if (SvTAIL(r->check_substr ? r->check_substr : r->check_utf8))
 		r->extflags |= RXf_INTUIT_TAIL;
 	}
+        r->substrs->data[0].max_offset = r->substrs->data[0].min_offset;
+
 	/* XXX Unneeded? dmq (shouldn't as this is handled elsewhere)
 	if ( (STRLEN)minlen < longest_float_length )
             minlen= longest_float_length;
