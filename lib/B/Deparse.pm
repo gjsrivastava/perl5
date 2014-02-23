@@ -20,7 +20,7 @@ use B qw(class main_root main_start main_cv svref_2object opnumber perlstring
          CVf_METHOD CVf_LVALUE
 	 PMf_KEEP PMf_GLOBAL PMf_CONTINUE PMf_EVAL PMf_ONCE
 	 PMf_MULTILINE PMf_SINGLELINE PMf_FOLD PMf_EXTENDED);
-$VERSION = '1.25';
+$VERSION = '1.26';
 use strict;
 use vars qw/$AUTOLOAD/;
 use warnings ();
@@ -3322,7 +3322,9 @@ sub pp_aelemfast_lex {
     my($op, $cx) = @_;
     my $name = $self->padname($op->targ);
     $name =~ s/^@/\$/;
-    return $name . "[" .  ($op->private + $self->{'arybase'}) . "]";
+    my $i = $op->private;
+    $i -= 256 if $i > 127;
+    return $name . "[" .  ($i + $self->{'arybase'}) . "]";
 }
 
 sub pp_aelemfast {
@@ -3334,7 +3336,9 @@ sub pp_aelemfast {
     my $gv = $self->gv_or_padgv($op);
     my($name,$quoted) = $self->stash_variable_name('@',$gv);
     $name = $quoted ? "$name->" : '$' . $name;
-    return $name . "[" .  ($op->private + $self->{'arybase'}) . "]";
+    my $i = $op->private;
+    $i -= 256 if $i > 127;
+    return $name . "[" .  ($i + $self->{'arybase'}) . "]";
 }
 
 sub rv2x {
