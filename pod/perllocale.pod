@@ -196,7 +196,8 @@ The operations that are affected by locale are:
 
 =item B<Not within the scope of any C<"use locale"> variant>
 
-Only operations originating outside Perl should be affected, as follows:
+Only certain operations originating outside Perl should be affected, as
+follows:
 
 =over 4
 
@@ -218,11 +219,26 @@ locale-sensitive.
 Also Perl gives access to various C library functions through the
 L<POSIX> module.  Some of those functions are always affected by the
 current locale.  For example, C<POSIX::strftime()> uses C<LC_TIME>;
-C<POSIX::strtod()> uses C<LC_NUMERIC>; C<POSIX::strcoll()> and
-C<POSIX::strxfrm()> use C<LC_COLLATE>; and character classification
-functions like C<POSIX::isalnum()> use C<LC_CTYPE>.  All such functions
-will behave according to the current underlying locale, even if that
-locale isn't exposed to Perl space.
+C<POSIX::strcoll()> and C<POSIX::strxfrm()> use C<LC_COLLATE>; and
+character classification functions like C<POSIX::isalnum()> use
+C<LC_CTYPE>.  All such functions will behave according to the current
+underlying locale, except for C<LC_NUMERIC>, even if that locale isn't
+exposed to Perl space.
+
+C<LC_NUMERIC>-affected functions are the exception.  Of these, only
+C<POSIX::strtod()> behaves as described above, using the underlying
+locale without regard to being within the scope of C<S<use locale>> or
+not.
+
+(Perl also provides lite wrappers for XS modules to use some C library
+C<printf> functions, like
+L<perlapi/my_sprintf>,
+L<perlapi/my_snprintf>,
+and
+L<perlapi/my_vsnprintf>.
+These generally always use the "C" locale, unless the XS code (perhaps
+inadvertently) has changed things so they use the underlying locale.)
+
 
 =item *
 

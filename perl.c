@@ -256,6 +256,10 @@ perl_construct(pTHXx)
 
     init_i18nl10n(1);
 
+    /* Keep LC_NUMERIC in the C locale for backwards compatibility.
+     * (Operations that need to change it do so temporarily) */
+    SET_NUMERIC_STANDARD();
+
 #if defined(LOCAL_PATCH_COUNT)
     PL_localpatches = local_patches;	/* For possible -v */
 #endif
